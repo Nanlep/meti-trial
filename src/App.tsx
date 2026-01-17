@@ -10,7 +10,7 @@ import { Auth } from './components/Auth';
 import { LandingPage } from './components/LandingPage';
 import { SupportModal } from './components/SupportModal';
 import { permissionService, SubscriptionTier } from './services/permissionService';
-import { Layers, Target, Users, Magnet, UserPlus, Zap, LayoutTemplate, FileText, LogOut, Shield, Crown, Star, Megaphone, Lock, BookOpen, Clock, CheckSquare, Mail, Settings, HelpCircle, Save, WifiOff, Search, ArrowRight, Activity, Database } from 'lucide-react';
+import { Layers, Target, Users, Magnet, UserPlus, Zap, LayoutTemplate, FileText, LogOut, Shield, Crown, Star, Megaphone, Lock as LockIcon, BookOpen, Clock, CheckSquare, Mail, Settings, HelpCircle, Save, WifiOff, Search, ArrowRight, Activity, Database } from 'lucide-react';
 import { Logo } from './components/Logo';
 import { ToastContainer } from './components/Toast';
 import { Spinner } from './components/Shared';
@@ -303,6 +303,7 @@ const App: React.FC = () => {
     );
   }
 
+  // Ensure daysRemaining is defined here to fix "Cannot find name" error
   const daysRemaining = user && permissionService.getTrialDaysRemaining(user);
   const isSetupLocked = !!currentProject && (!!currentProject.data.selectedNiche || !!currentProject.data.persona);
 
@@ -364,14 +365,14 @@ const App: React.FC = () => {
               {steps.slice(0, 4).map(step => (
                 <button key={step.id} onClick={() => canAccessStep(step.id) && setCurrentStep(step.id)} disabled={!canAccessStep(step.id)} className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all ${currentStep === step.id ? 'bg-slate-800 text-white border border-slate-700' : 'text-slate-400 hover:bg-slate-800/50'} ${!canAccessStep(step.id) ? 'opacity-50 cursor-not-allowed' : ''}`}>
                   <step.icon size={18} className={currentStep === step.id ? 'text-indigo-400' : ''} /> {step.label}
-                  {step.minTier && !permissionService.hasAccess(user, step.minTier) && <Lock size={12} className="ml-auto text-amber-500" />}
+                  {step.minTier && !permissionService.hasAccess(user, step.minTier) && <LockIcon size={12} className="ml-auto text-amber-500" />}
                 </button>
               ))}
               <div className="px-4 text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 mt-6">Execution</div>
               {steps.slice(4, 9).map(step => (
                 <button key={step.id} onClick={() => canAccessStep(step.id) && setCurrentStep(step.id)} disabled={!canAccessStep(step.id)} className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all ${currentStep === step.id ? 'bg-slate-800 text-white border border-slate-700' : 'text-slate-400 hover:bg-slate-800/50'} ${!canAccessStep(step.id) ? 'opacity-50 cursor-not-allowed' : ''}`}>
                   <step.icon size={18} className={currentStep === step.id ? 'text-indigo-400' : ''} /> {step.label}
-                  {step.minTier && !permissionService.hasAccess(user, step.minTier) && <Lock size={12} className="ml-auto text-amber-500" />}
+                  {step.minTier && !permissionService.hasAccess(user, step.minTier) && <LockIcon size={12} className="ml-auto text-amber-500" />}
                 </button>
               ))}
               <div className="px-4 text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 mt-6">Export</div>
@@ -494,7 +495,7 @@ const App: React.FC = () => {
                    {currentStep === AppStep.REPORT && <StepReport data={data} />}
                  </>
                )}
-               {currentStep === AppStep.PRICING && <StepPricing />}
+               {currentStep === AppStep.PRICING && <StepPricing user={user} />}
              </Suspense>
            </ErrorBoundary>
         </div>
